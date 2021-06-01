@@ -20,6 +20,7 @@ import {
   CardBody,
   Row,
   InputGroup,
+  ModalView,
 } from './styles';
 
 import * as db from '../../db';
@@ -72,15 +73,18 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
     setDescricao('');
     setAtividade(undefined);
     setQuantidade('0');
+    setQuantidadeFinal('0');
+    setQuantidadeInicial('0');
   }
 
   function handleShowModal() {
+    resetData();
+
     setShow(true);
   }
 
   function handleHideModal() {
     setShow(false);
-    resetData();
   }
 
   useEffect(() => {
@@ -141,6 +145,9 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
       setDescricao('');
       setAtividade(undefined);
       setQuantidade('0');
+      setQuantidadeFinal('0');
+      setQuantidadeInicial('0');
+      setFuroNome('');
     }
   }
 
@@ -179,116 +186,118 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
       {show && (
         <Modal transparent>
           <ModalContainer>
-            <ModalContent>
-              <Title>Adicionar Atividade</Title>
+            <ModalView>
+              <ModalContent>
+                <Title>Adicionar Atividade</Title>
 
-              <Label>Atividade</Label>
-              <Select
-                data={atividades}
-                labelKey="descricao"
-                valueKey="id"
-                listLength={3}
-                placeholder="Selecione uma atividade"
-                selectedValue={atividadeId}
-                onSelect={(selected: IAtividade) => {
-                  setAtividadeId(selected.id);
-                  setAtividade(selected);
-                  setDescricao(selected.descricao);
-                }}
-              />
+                <Label>Atividade</Label>
+                <Select
+                  data={atividades}
+                  labelKey="descricao"
+                  valueKey="id"
+                  listLength={3}
+                  placeholder="Selecione uma atividade"
+                  selectedValue={atividadeId}
+                  onSelect={(selected: IAtividade) => {
+                    setAtividadeId(selected.id);
+                    setAtividade(selected);
+                    setDescricao(selected.descricao);
+                  }}
+                />
 
-              {atividade?.tipo === 'produtiva' && (
-                <React.Fragment>
-                  <Label>Furo</Label>
-                  <Select
-                    data={furos}
-                    labelKey="nome"
-                    valueKey="nome"
-                    listLength={3}
-                    placeholder="Selecione um furo"
-                    selectedValue={furoNome}
-                    onSelect={({nome}: IFuro) => {
-                      setFuroNome(nome);
-                    }}
-                    onBlur={setFuroNome}
-                  />
-                </React.Fragment>
-              )}
-
-              {atividade?.tipo === 'produtiva' ? (
-                atividade.unidadeMedida === 'unidades' ? (
+                {atividade?.tipo === 'produtiva' && (
                   <React.Fragment>
-                    <Label>Quantidade (un)</Label>
-                    <NumberInput
-                      onChange={newValue => {
-                        setQuantidade(String(newValue));
+                    <Label>Furo</Label>
+                    <Select
+                      data={furos}
+                      labelKey="nome"
+                      valueKey="nome"
+                      listLength={3}
+                      placeholder="Selecione um furo"
+                      selectedValue={furoNome}
+                      onSelect={({nome}: IFuro) => {
+                        setFuroNome(nome);
                       }}
-                      value={quantidade}
-                      onlyIntegers
-                      unsigned
+                      onBlur={setFuroNome}
                     />
                   </React.Fragment>
-                ) : (
-                  <React.Fragment>
-                    <Row>
-                      <InputGroup>
-                        <Label>Qtd Inicial (m)</Label>
-                        <Input
-                          placeholder="Quantidade"
-                          onChangeText={setQuantidadeInicial}
-                          value={quantidadeInicial}
-                          keyboardType="decimal-pad"
-                        />
-                      </InputGroup>
-                      <InputGroup style={{marginLeft: 8}}>
-                        <Label>Qtd Final (m)</Label>
-                        <Input
-                          placeholder="Quantidade"
-                          onChangeText={setQuantidadeFinal}
-                          value={quantidadeFinal}
-                          keyboardType="decimal-pad"
-                        />
-                      </InputGroup>
-                    </Row>
+                )}
 
-                    <Label>Quantidade Total (m)</Label>
-                    <Input
-                      placeholder="Quantidade"
-                      onChangeText={setQuantidadeFinal}
-                      value={quantidade}
-                      editable={false}
-                      keyboardType="decimal-pad"
-                    />
-                  </React.Fragment>
-                )
-              ) : null}
+                {atividade?.tipo === 'produtiva' ? (
+                  atividade.unidadeMedida === 'unidades' ? (
+                    <React.Fragment>
+                      <Label>Quantidade (un)</Label>
+                      <NumberInput
+                        onChange={newValue => {
+                          setQuantidade(String(newValue));
+                        }}
+                        value={quantidade}
+                        onlyIntegers
+                        unsigned
+                      />
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment>
+                      <Row>
+                        <InputGroup>
+                          <Label>Qtd Inicial (m)</Label>
+                          <Input
+                            placeholder="Quantidade"
+                            onChangeText={setQuantidadeInicial}
+                            value={quantidadeInicial}
+                            keyboardType="decimal-pad"
+                          />
+                        </InputGroup>
+                        <InputGroup style={{marginLeft: 8}}>
+                          <Label>Qtd Final (m)</Label>
+                          <Input
+                            placeholder="Quantidade"
+                            onChangeText={setQuantidadeFinal}
+                            value={quantidadeFinal}
+                            keyboardType="decimal-pad"
+                          />
+                        </InputGroup>
+                      </Row>
 
-              <Label>Início da Atividade</Label>
-              <ClockPicker
-                value={horaInicio}
-                onChange={date => {
-                  setHoraInicio(date);
-                }}
-              />
+                      <Label>Quantidade Total (m)</Label>
+                      <Input
+                        placeholder="Quantidade"
+                        onChangeText={setQuantidadeFinal}
+                        value={quantidade}
+                        editable={false}
+                        keyboardType="decimal-pad"
+                      />
+                    </React.Fragment>
+                  )
+                ) : null}
 
-              <Label>Fim da Atividade</Label>
-              <ClockPicker
-                value={horaFim}
-                onChange={date => {
-                  setHoraFim(date);
-                }}
-              />
+                <Label>Início da Atividade</Label>
+                <ClockPicker
+                  value={horaInicio}
+                  onChange={date => {
+                    setHoraInicio(date);
+                  }}
+                />
 
-              <Buttons>
-                <CancelButton onPress={handleHideModal}>
-                  <AddButtonText>Cancelar</AddButtonText>
-                </CancelButton>
+                <Label>Fim da Atividade</Label>
+                <ClockPicker
+                  value={horaFim}
+                  onChange={date => {
+                    setHoraFim(date);
+                  }}
+                />
 
-                <FinalizaButton disabled={!valid} onPress={handleFinaliza}>
-                  <AddButtonText>Adicionar</AddButtonText>
-                </FinalizaButton>
-              </Buttons>
-            </ModalContent>
+                <Buttons>
+                  <CancelButton onPress={handleHideModal}>
+                    <AddButtonText>Cancelar</AddButtonText>
+                  </CancelButton>
+
+                  <FinalizaButton disabled={!valid} onPress={handleFinaliza}>
+                    <AddButtonText>Adicionar</AddButtonText>
+                  </FinalizaButton>
+                </Buttons>
+              </ModalContent>
+            </ModalView>
           </ModalContainer>
         </Modal>
       )}
@@ -297,15 +306,3 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
 };
 
 export default AtividadeRDO;
-
-// {atividade?.tipo === 'produtiva' ? (
-//   <React.Fragment>
-//     <Label>Quantidade ({atividade?.unidadeMedida})</Label>
-//     <Input
-//       placeholder="Quantidade"
-//       onChangeText={setQuantidade}
-//       value={quantidade}
-//       keyboardType="decimal-pad"
-//     />
-//   </React.Fragment>
-// ) : null}

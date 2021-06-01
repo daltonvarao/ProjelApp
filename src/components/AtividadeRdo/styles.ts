@@ -6,9 +6,9 @@ export const Container = styled.View`
 `;
 
 export const Modal = styled.Modal`
-  flex: 1;
+  /* flex: 1;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 `;
 
 export const ModalContainer = styled.View`
@@ -18,11 +18,15 @@ export const ModalContainer = styled.View`
   align-items: center;
 `;
 
-export const ModalContent = styled.View`
-  background: #f8f8ff;
-  padding: 20px 16px;
+export const ModalView = styled.View`
   width: 90%;
+  justify-content: center;
+`;
+
+export const ModalContent = styled.ScrollView`
   border-radius: 8px;
+  padding: 20px 16px;
+  background: #f8f8ff;
 `;
 
 export const Title = styled.Text`

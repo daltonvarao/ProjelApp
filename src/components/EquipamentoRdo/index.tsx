@@ -95,6 +95,7 @@ const EquipamentoRDO: React.FC<EquipamentoRdoProps> = ({
       });
 
       setEquipamentoId(undefined);
+      setQuantidade('1');
 
       setShow(false);
     }
