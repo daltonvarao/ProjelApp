@@ -24,7 +24,7 @@ const DatePicker: React.FC<DatePickerProps> = ({value, onChange}) => {
         <DateTimePicker
           value={value}
           display="spinner"
-          onChange={(ev, date) => {
+          onChange={(ev: Event, date?: Date) => {
             setShow(false);
             onChange(ev, date);
           }}
