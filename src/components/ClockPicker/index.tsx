@@ -30,7 +30,7 @@ const ClockPicker: React.FC<ClockPickerProps> = ({value, onChange}) => {
           value={value}
           mode="time"
           display="spinner"
-          onChange={(_, date) => {
+          onChange={(_: Event, date?: Date) => {
             setShow(false);
             onChange(date || value);
           }}

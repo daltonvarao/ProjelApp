@@ -96,4 +96,5 @@ export const RemoveItem = styled.TouchableOpacity.attrs(() => ({
 export const ItemText = styled.Text`
   font-family: 'Poppins-SemiBold';
   font-size: 16px;
+  color: ${colors.dark};
 `;

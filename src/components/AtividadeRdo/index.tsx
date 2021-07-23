@@ -58,7 +58,9 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
   const [descricao, setDescricao] = useState('');
 
   const [horaInicio, setHoraInicio] = useState(new Date());
-  const [horaFim, setHoraFim] = useState(new Date(Date.now() + 1000 * 60 ** 2));
+  const [horaFim, setHoraFim] = useState(
+    new Date(horaInicio.getTime() + 1000 * 60 ** 2),
+  );
 
   const [quantidade, setQuantidade] = useState('1');
   const [quantidadeInicial, setQuantidadeInicial] = useState('0');
@@ -72,7 +74,7 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
     setAtividadeId(undefined);
     setDescricao('');
     setAtividade(undefined);
-    setQuantidade('0');
+    setQuantidade('1');
     setQuantidadeFinal('0');
     setQuantidadeInicial('0');
   }
@@ -173,7 +175,7 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
                 ) : null}
               </CardBody>
               <RemoveItem onPress={() => onRemove(index)}>
-                <Feather name="x" size={20} />
+                <Feather name="x" size={18} color="#aaa" />
               </RemoveItem>
             </ListItem>
           );
@@ -240,7 +242,7 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
                     <React.Fragment>
                       <Row>
                         <InputGroup>
-                          <Label>Qtd Inicial (m)</Label>
+                          <Label>Q. Inicial</Label>
                           <Input
                             placeholder="Quantidade"
                             onChangeText={setQuantidadeInicial}
@@ -249,7 +251,7 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
                           />
                         </InputGroup>
                         <InputGroup style={{marginLeft: 8}}>
-                          <Label>Qtd Final (m)</Label>
+                          <Label>Q. Final</Label>
                           <Input
                             placeholder="Quantidade"
                             onChangeText={setQuantidadeFinal}
@@ -257,35 +259,41 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
                             keyboardType="decimal-pad"
                           />
                         </InputGroup>
+                        <InputGroup style={{marginLeft: 8}}>
+                          <Label>Q. Total</Label>
+                          <Input
+                            placeholder="Quantidade"
+                            onChangeText={setQuantidadeFinal}
+                            value={quantidade}
+                            editable={false}
+                            keyboardType="decimal-pad"
+                          />
+                        </InputGroup>
                       </Row>
-
-                      <Label>Quantidade Total (m)</Label>
-                      <Input
-                        placeholder="Quantidade"
-                        onChangeText={setQuantidadeFinal}
-                        value={quantidade}
-                        editable={false}
-                        keyboardType="decimal-pad"
-                      />
                     </React.Fragment>
                   )
                 ) : null}
 
-                <Label>Início da Atividade</Label>
-                <ClockPicker
-                  value={horaInicio}
-                  onChange={date => {
-                    setHoraInicio(date);
-                  }}
-                />
-
-                <Label>Fim da Atividade</Label>
-                <ClockPicker
-                  value={horaFim}
-                  onChange={date => {
-                    setHoraFim(date);
-                  }}
-                />
+                <Row>
+                  <InputGroup>
+                    <Label>Horário inicial</Label>
+                    <ClockPicker
+                      value={horaInicio}
+                      onChange={date => {
+                        setHoraInicio(date);
+                      }}
+                    />
+                  </InputGroup>
+                  <InputGroup style={{marginLeft: 8}}>
+                    <Label>Horário final</Label>
+                    <ClockPicker
+                      value={horaFim}
+                      onChange={date => {
+                        setHoraFim(date);
+                      }}
+                    />
+                  </InputGroup>
+                </Row>
 
                 <Buttons>
                   <CancelButton onPress={handleHideModal}>

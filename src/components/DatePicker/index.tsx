@@ -5,6 +5,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import {Container, TextButton} from './styles';
 
 import parseDate from '../../utils/parseDate';
+import colors from '../../styles/colors';
 
 interface DatePickerProps {
   value: Date;
@@ -32,7 +33,7 @@ const DatePicker: React.FC<DatePickerProps> = ({value, onChange}) => {
         />
       )}
       <TextButton>{parseDate(value)}</TextButton>
-      <Feather name="calendar" size={22} />
+      <Feather name="calendar" color={colors.dark} size={22} />
     </Container>
   );
 };

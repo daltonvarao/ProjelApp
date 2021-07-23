@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text} from 'react-native';
+import {View, FlatList, ListRenderItem} from 'react-native';
 
 import Feather from 'react-native-vector-icons/Feather';
 
@@ -8,10 +8,12 @@ import {
   ListContainer,
   ListItem,
   ListItemLabel,
-  PreviewSelectedItems,
   SelectedItem,
   SelectedItemText,
   Input,
+  SelectedTitle,
+  RemoveItem,
+  SelectedItemOffset,
 } from './styles';
 
 interface MultiSelectProps {
@@ -54,6 +56,17 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     setPreviewSelectedItems(preview);
   }, [data, selectedValues, search, labelKey, valueKey]);
 
+  const renderItem: ListRenderItem<any> = ({item, index}) => {
+    return (
+      <SelectedItem key={index.toString()}>
+        <SelectedItemText>{item[labelKey]}</SelectedItemText>
+        <RemoveItem onPress={() => onRemove(item)}>
+          <Feather name="x" size={18} color="#aaa" />
+        </RemoveItem>
+      </SelectedItem>
+    );
+  };
+
   return (
     <View>
       <InputContainer>
@@ -79,20 +92,18 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
       )}
 
       {previewSelectedItems.length > 0 && (
-        <Text style={{paddingHorizontal: 8}}>Selecionados</Text>
+        <SelectedTitle>Selecionados</SelectedTitle>
       )}
 
-      <PreviewSelectedItems>
-        {previewSelectedItems.map((selected, index) => (
-          <SelectedItem
-            key={index.toString()}
-            onPress={() => onRemove(selected)}>
-            <SelectedItemText>
-              {selected[labelKey]} <Feather name="x" size={16} color="#aaa" />
-            </SelectedItemText>
-          </SelectedItem>
-        ))}
-      </PreviewSelectedItems>
+      <FlatList
+        data={previewSelectedItems}
+        keyExtractor={(_, index: number) => index.toString()}
+        showsHorizontalScrollIndicator={false}
+        renderItem={renderItem}
+        ItemSeparatorComponent={SelectedItemOffset}
+        scrollEnabled
+        horizontal
+      />
     </View>
   );
 };

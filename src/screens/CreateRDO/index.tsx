@@ -317,10 +317,13 @@ const CreateRDO: React.FC = () => {
             }}
             onRemove={(removedItem: IUser) => {
               const selectedItems = [...state.users];
-              selectedItems.splice(
-                selectedItems.indexOf({userId: removedItem.id}),
-                1,
+
+              const removedUserIndex = selectedItems.findIndex(
+                ({userId}) => userId === removedItem.id,
               );
+
+              selectedItems.splice(removedUserIndex, 1);
+
               dispatch({
                 type: 'CHANGE_STATE',
                 field: 'users',

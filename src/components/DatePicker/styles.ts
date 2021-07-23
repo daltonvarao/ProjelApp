@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import colors from '../../styles/colors';
 
 export const Container = styled.TouchableOpacity`
   width: 100%;
@@ -17,4 +18,5 @@ export const TextButton = styled.Text`
   font-size: 16px;
   line-height: 34px;
   font-family: 'Poppins-SemiBold';
+  color: ${colors.dark};
 `;

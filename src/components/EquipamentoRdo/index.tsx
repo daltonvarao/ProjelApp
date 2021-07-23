@@ -40,12 +40,16 @@ const EquipamentoRDO: React.FC<EquipamentoRdoProps> = ({
   const [show, setShow] = useState(false);
   const [valid, setValid] = useState(false);
 
-  const [equipamentoId, setEquipamentoId] = useState<number>();
+  const [equipamentoId, setEquipamentoId] = useState<number | undefined>();
   const [quantidade, setQuantidade] = useState('1');
 
   const [equipamentos, setEquipamentos] = useState<IEquipamento[]>([]);
-
   const [previewData, setPreviewData] = useState<IEquipamento[]>([]);
+
+  function resetData() {
+    setEquipamentoId(undefined);
+    setQuantidade('1');
+  }
 
   async function loadCollections() {
     const realm = await db.connect();
@@ -62,6 +66,7 @@ const EquipamentoRDO: React.FC<EquipamentoRdoProps> = ({
   }
 
   function handleHideModal() {
+    resetData();
     setShow(false);
   }
 
@@ -94,9 +99,7 @@ const EquipamentoRDO: React.FC<EquipamentoRdoProps> = ({
         quantidade: Number(quantidade),
       });
 
-      setEquipamentoId(undefined);
-      setQuantidade('1');
-
+      resetData();
       setShow(false);
     }
   }
@@ -112,7 +115,7 @@ const EquipamentoRDO: React.FC<EquipamentoRdoProps> = ({
                 {item.descricao.length > 20 && '...'}
               </ItemText>
               <RemoveItem onPress={() => onRemove(item)}>
-                <Feather name="x" size={20} />
+                <Feather name="x" color="#aaa" size={20} />
               </RemoveItem>
             </ListItem>
           );
