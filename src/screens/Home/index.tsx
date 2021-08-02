@@ -1,11 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {
-  FlatList,
-  ListRenderItem,
-  View,
-  RefreshControl,
-  Alert,
-} from 'react-native';
+import {FlatList, ListRenderItem, RefreshControl, Alert} from 'react-native';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import NetInfo from '@react-native-community/netinfo';
 
