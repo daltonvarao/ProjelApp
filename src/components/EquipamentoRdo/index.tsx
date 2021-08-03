@@ -129,6 +129,7 @@ const EquipamentoRDO: React.FC<EquipamentoRdoProps> = ({
           onSelect={selectedEq => {
             setEquipamentoId(selectedEq.id);
           }}
+          listBgColor="#f5f5f8"
         />
 
         <Label>Quantidade</Label>

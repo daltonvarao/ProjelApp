@@ -1,16 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, createRef} from 'react';
+import {Animated, ToastAndroid, Vibration} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 import {
   Container,
   ListItems,
   ListItem,
   ItemText,
-  RemoveItem,
-  TimeText,
   CardBody,
   Row,
   InputGroup,
+  RemoveItemRight,
+  CardHeader,
+  TitleText,
+  Table,
+  TableRow,
+  TableHeader,
+  TableData,
+  ItemTextObs,
+  CardContent,
 } from './styles';
 
 import * as db from '../../db';
@@ -21,9 +30,9 @@ import ClockPicker from '../ClockPicker';
 import {Input, Label} from '../../styles/globals';
 import {IAtividade} from '../../db/models/AtividadeSchema';
 import {IAtividadeRdo} from '../../db/models/AtividadeRdoSchema';
+import {IFuro} from '../../db/models/FuroSchema';
 import parseTime from '../../utils/parseTime';
 import NumberInput from '../NumberInput';
-import {IFuro} from '../../db/models/FuroSchema';
 import Modal from '../Modal';
 import Button from '../Button';
 
@@ -33,6 +42,109 @@ interface AtividadeRdoProps {
   value: IAtividadeRdo[];
   estruturaId?: number;
 }
+
+const RenderListItem: React.FC<{
+  item: IAtividadeRdo;
+  index: number;
+  onRemove: (index: number) => void;
+}> = ({index, item, onRemove}) => {
+  const [elevation] = useState(new Animated.Value(0));
+  const ref = createRef<Swipeable>();
+
+  function increaseElevation() {
+    Animated.timing(elevation, {
+      toValue: 1,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  function decreaseElevation() {
+    Animated.timing(elevation, {
+      toValue: 0,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  function toM(value: number) {
+    return value.toFixed(2).concat('m').replace('.', ',');
+  }
+
+  return (
+    <Swipeable
+      ref={ref}
+      onSwipeableRightOpen={() => {
+        if (ref.current) {
+          ref.current.close();
+        }
+        onRemove(index);
+      }}
+      onSwipeableRightWillOpen={() => {
+        Vibration.vibrate(100);
+      }}
+      onActivated={increaseElevation}
+      onCancelled={decreaseElevation}
+      onSwipeableWillClose={decreaseElevation}
+      renderRightActions={() => {
+        return (
+          <RemoveItemRight>
+            <Feather name="trash" size={26} color="#fff" />
+          </RemoveItemRight>
+        );
+      }}>
+      <ListItem style={{elevation}}>
+        <CardBody
+          onPress={() => {
+            ToastAndroid.show(
+              'Arraste para a esquerda para deletar',
+              ToastAndroid.SHORT,
+            );
+          }}>
+          <CardHeader>
+            <ItemText>
+              {parseTime(item.horaInicio, false)
+                .concat(' - ')
+                .concat(parseTime(item.horaFim, false))}
+            </ItemText>
+            <ItemText>{item?.furoNome}</ItemText>
+          </CardHeader>
+          <CardContent noBorder={!(item.tipo === 'produtiva')}>
+            <TitleText>{item.descricao}</TitleText>
+            {!!item.observacao && <ItemTextObs>{item.observacao}</ItemTextObs>}
+          </CardContent>
+          {item.tipo === 'produtiva' ? (
+            item.unidadeMedida === 'unidades' ? (
+              <Table>
+                <TableRow>
+                  <TableHeader>Quantidade</TableHeader>
+
+                  <TableData>
+                    {item.quantidade.toString().concat(' unidade(s)')}
+                  </TableData>
+                </TableRow>
+              </Table>
+            ) : (
+              <Table>
+                <TableRow>
+                  <TableHeader>Q. Inicial</TableHeader>
+                  <TableHeader>Q. Final</TableHeader>
+                  <TableHeader>Q. Total</TableHeader>
+                </TableRow>
+
+                <TableRow>
+                  <TableData>{toM(item.quantidadeInicial)}</TableData>
+                  <TableData>{toM(item.quantidadeFinal)}</TableData>
+                  <TableData>{toM(item.quantidade)}</TableData>
+                </TableRow>
+              </Table>
+            )
+          ) : null}
+        </CardBody>
+      </ListItem>
+    </Swipeable>
+  );
+};
 
 const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
   value,
@@ -48,13 +160,14 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
   const [atividade, setAtividade] = useState<IAtividade>();
   const [atividadeId, setAtividadeId] = useState<number>();
   const [descricao, setDescricao] = useState('');
+  const [observacao, setObservacao] = useState('');
 
   const [horaInicio, setHoraInicio] = useState(new Date());
   const [horaFim, setHoraFim] = useState(
     new Date(horaInicio.getTime() + 1000 * 60 ** 2),
   );
 
-  const [quantidade, setQuantidade] = useState('1');
+  const [quantidade, setQuantidade] = useState('0');
   const [quantidadeInicial, setQuantidadeInicial] = useState('0');
   const [quantidadeFinal, setQuantidadeFinal] = useState('0');
   const [furoNome, setFuroNome] = useState<string>();
@@ -66,9 +179,10 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
     setAtividadeId(undefined);
     setDescricao('');
     setAtividade(undefined);
-    setQuantidade('1');
+    setQuantidade('0');
     setQuantidadeFinal('0');
     setQuantidadeInicial('0');
+    setObservacao('');
   }
 
   function handleShowModal() {
@@ -113,6 +227,12 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
     );
   }, [quantidadeFinal, quantidadeInicial]);
 
+  useEffect(() => {
+    if (atividade?.unidadeMedida === 'unidades') {
+      setQuantidade('1');
+    }
+  }, [atividade]);
+
   function handleFinaliza() {
     if (horaFim > horaInicio && atividadeId && quantidade && atividade) {
       onSelect({
@@ -126,48 +246,22 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
         quantidadeFinal: Number(quantidadeFinal),
         quantidadeInicial: Number(quantidadeInicial),
         furoNome,
+        observacao,
       });
-
-      setHoraFim(new Date(horaFim.getTime() + 60000 * 60));
-      setHoraInicio(horaFim);
-      setShow(false);
-      setAtividadeId(undefined);
-      setDescricao('');
-      setAtividade(undefined);
-      setQuantidade('0');
-      setQuantidadeFinal('0');
-      setQuantidadeInicial('0');
-      setFuroNome('');
     }
   }
 
   return (
     <Container>
       <ListItems>
-        {value.map((item, index) => {
-          return (
-            <ListItem key={index.toString()}>
-              <CardBody>
-                <TimeText>
-                  {parseTime(item.horaInicio, false)
-                    .concat(' - ')
-                    .concat(parseTime(item.horaFim, false))}
-                </TimeText>
-                <ItemText>{item.descricao}</ItemText>
-                {item.tipo === 'produtiva' ? (
-                  <ItemText>
-                    {item.unidadeMedida === 'metros'
-                      ? item.quantidade.toString().concat(' metro(s)')
-                      : item.quantidade.toString().concat(' unidade(s)')}
-                  </ItemText>
-                ) : null}
-              </CardBody>
-              <RemoveItem onPress={() => onRemove(index)}>
-                <Feather name="x" size={18} color="#aaa" />
-              </RemoveItem>
-            </ListItem>
-          );
-        })}
+        {value.map((item, index) => (
+          <RenderListItem
+            key={index.toString()}
+            index={index}
+            item={item}
+            onRemove={onRemove}
+          />
+        ))}
       </ListItems>
 
       <Button
@@ -181,7 +275,8 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
         visible={show}
         onClose={() => setShow(false)}
         disableConfirmButton={!valid}
-        onConfirm={handleFinaliza}>
+        onConfirm={handleFinaliza}
+        closeOnConfirm>
         <Label>Atividade</Label>
         <Select
           data={atividades}
@@ -195,6 +290,21 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
             setAtividade(selected);
             setDescricao(selected.descricao);
           }}
+          listBgColor="#f5f5f8"
+        />
+
+        <Label>Observação ({observacao.length} / 80)</Label>
+        <Input
+          placeholder="Observação"
+          value={observacao}
+          onChangeText={text => setObservacao(text.replace(/\r?\n|\r/g, ''))}
+          autoCapitalize="none"
+          autoCompleteType="off"
+          autoCorrect={false}
+          multiline
+          numberOfLines={4}
+          textAlignVertical="top"
+          maxLength={80}
         />
 
         {atividade?.tipo === 'produtiva' && (
@@ -211,6 +321,7 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
                 setFuroNome(nome);
               }}
               onBlur={setFuroNome}
+              listBgColor="#f5f5f8"
             />
           </React.Fragment>
         )}
@@ -223,9 +334,10 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
                 onChange={newValue => {
                   setQuantidade(String(newValue));
                 }}
-                value={quantidade}
+                value={quantidade || '1'}
                 onlyIntegers
                 unsigned
+                nonNull
               />
             </React.Fragment>
           ) : (

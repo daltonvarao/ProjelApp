@@ -22,8 +22,9 @@ export const Input = styled.TextInput`
 
 export const ListContainer = styled.ScrollView<{
   listLength?: number;
+  background: string;
 }>`
-  background: #f5f5f8;
+  background: ${props => props.background};
 
   border-radius: 5px;
   margin-bottom: 10px;
@@ -59,3 +60,5 @@ export const SelectedItem = styled.TouchableOpacity`
 export const SelectedItemText = styled.Text`
   font-size: 14px;
 `;
+
+export const SelectActionButton = styled.TouchableOpacity``;

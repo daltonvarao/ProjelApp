@@ -114,9 +114,15 @@ export default function Settings() {
 
           if (outdated) {
             await syncWithApi();
+            ToastAndroid.show('Dados sincronizados', ToastAndroid.SHORT);
           } else {
+            ToastAndroid.show('Dados sincronizados', ToastAndroid.SHORT);
           }
         } catch (error) {
+          ToastAndroid.show(
+            'Erro ao sincronizados dados, tente novamente',
+            ToastAndroid.SHORT,
+          );
           console.log(error);
         }
       }

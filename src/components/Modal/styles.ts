@@ -7,7 +7,7 @@ export const ModalContainer = styled.View`
   position: relative;
 `;
 
-export const ModalContent = styled.View`
+export const ModalContent = styled.KeyboardAvoidingView`
   background: #fff;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
@@ -30,7 +30,7 @@ export const ModalBody = styled.ScrollView`
 `;
 
 export const ModalFooter = styled.View`
-  padding: 16px;
+  padding: 12px 16px;
 `;
 
 export const ModalTitle = styled.Text`

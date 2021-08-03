@@ -6,6 +6,7 @@ export interface IAtividadeRdo {
   horaInicio: Date;
   quantidade: number;
   descricao: string;
+  observacao?: string;
   unidadeMedida?: 'metros' | 'unidades';
   tipo: 'parada' | 'improdutiva' | 'produtiva';
   quantidadeInicial: number;
@@ -18,6 +19,7 @@ const AtividadeRdoSchema: Realm.ObjectSchema = {
   properties: {
     atividadeId: 'int',
     furoNome: 'string?',
+    observacao: 'string?',
     horaFim: 'date',
     horaInicio: 'date',
     quantidadeInicial: 'float?',

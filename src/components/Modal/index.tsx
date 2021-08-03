@@ -21,15 +21,17 @@ interface ModalProps {
   onClose: () => void;
   onConfirm?: () => void;
   disableConfirmButton?: boolean;
+  closeOnConfirm?: boolean;
 }
 
 const ReactModal: React.FC<ModalProps> = ({
   children,
   title,
   visible,
+  disableConfirmButton,
+  closeOnConfirm,
   onClose,
   onConfirm,
-  disableConfirmButton,
 }) => {
   return (
     <Modal
@@ -37,9 +39,10 @@ const ReactModal: React.FC<ModalProps> = ({
       backdropTransitionOutTiming={0}
       isVisible={visible}
       animationOut="slideOutDown"
+      statusBarTranslucent
       onBackdropPress={onClose}>
       <ModalContainer>
-        <ModalContent>
+        <ModalContent behavior="padding">
           <ModalHeader>
             <ModalTitle>{title}</ModalTitle>
 
@@ -51,7 +54,14 @@ const ReactModal: React.FC<ModalProps> = ({
           {!!onConfirm && (
             <ModalFooter>
               <ConfirmButton
-                onPress={onConfirm}
+                onPress={
+                  closeOnConfirm
+                    ? () => {
+                        onConfirm();
+                        onClose();
+                      }
+                    : onConfirm
+                }
                 {...{
                   disabled:
                     disableConfirmButton === undefined
