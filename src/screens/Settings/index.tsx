@@ -31,7 +31,7 @@ import * as auth from '../../services/auth';
 import * as db from '../../db';
 import * as sync from '../../services/sync';
 
-export default function Notifications() {
+export default function Settings() {
   const navigation = useNavigation();
 
   const spin = new Animated.Value(0);

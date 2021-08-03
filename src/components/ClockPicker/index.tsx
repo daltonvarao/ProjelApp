@@ -30,12 +30,12 @@ const ClockPicker: React.FC<ClockPickerProps> = ({value, onChange}) => {
           value={value}
           mode="time"
           display="spinner"
+          is24Hour
+          minuteInterval={1}
           onChange={(_: Event, date?: Date) => {
             setShow(false);
             onChange(date || value);
           }}
-          is24Hour
-          minuteInterval={5}
         />
       )}
     </>

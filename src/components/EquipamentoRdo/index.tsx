@@ -1,22 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 
-import {
-  Container,
-  Title,
-  Modal,
-  AddButton,
-  AddButtonText,
-  ModalContainer,
-  ModalContent,
-  CancelButton,
-  Buttons,
-  FinalizaButton,
-  ListItems,
-  ListItem,
-  ItemText,
-  RemoveItem,
-} from './styles';
+import {Container, ListItems, ListItem, ItemText, RemoveItem} from './styles';
+
+import Modal from '../Modal';
 
 import Select from '../Select';
 import * as db from '../../db';
@@ -25,6 +12,7 @@ import {Label} from '../../styles/globals';
 import {IEquipamentoRdo} from '../../db/models/EquipamentoRdoSchema';
 import {IEquipamento} from '../../db/models/EquipamentoSchema';
 import NumberInput from '../NumberInput';
+import Button from '../Button';
 
 interface EquipamentoRdoProps {
   onSelect: (selectedEquipamento: IEquipamentoRdo) => void;
@@ -62,12 +50,8 @@ const EquipamentoRDO: React.FC<EquipamentoRdoProps> = ({
   }
 
   function handleShowModal() {
-    setShow(true);
-  }
-
-  function handleHideModal() {
     resetData();
-    setShow(false);
+    setShow(true);
   }
 
   useEffect(() => {
@@ -121,51 +105,41 @@ const EquipamentoRDO: React.FC<EquipamentoRdoProps> = ({
           );
         })}
       </ListItems>
-      <AddButton onPress={handleShowModal}>
-        <AddButtonText>Adicionar novo equipamento</AddButtonText>
-      </AddButton>
 
-      {show && (
-        <Modal transparent>
-          <ModalContainer>
-            <ModalContent>
-              <Title>Adicionar Equipamento</Title>
+      <Button
+        title="Adicionar novo equipamento"
+        onPress={handleShowModal}
+        removeMargin
+      />
 
-              <Label>Nome</Label>
-              <Select
-                data={equipamentos}
-                labelKey="tag_description"
-                valueKey="id"
-                listLength={2}
-                placeholder="Procure algum equipamento"
-                selectedValue={equipamentoId}
-                onSelect={selectedEq => {
-                  setEquipamentoId(selectedEq.id);
-                }}
-              />
+      <Modal
+        visible={show}
+        title="Adicionar equipamento"
+        disableConfirmButton={!valid}
+        onConfirm={handleFinaliza}
+        onClose={() => setShow(false)}>
+        <Label>Nome</Label>
+        <Select
+          data={equipamentos}
+          labelKey="tag_description"
+          valueKey="id"
+          listLength={2}
+          placeholder="Procure algum equipamento"
+          selectedValue={equipamentoId}
+          onSelect={selectedEq => {
+            setEquipamentoId(selectedEq.id);
+          }}
+        />
 
-              <Label>Quantidade</Label>
+        <Label>Quantidade</Label>
 
-              <NumberInput
-                onChange={setQuantidade}
-                value={quantidade}
-                unsigned
-                onlyIntegers
-              />
-
-              <Buttons>
-                <CancelButton onPress={handleHideModal}>
-                  <AddButtonText>Cancelar</AddButtonText>
-                </CancelButton>
-
-                <FinalizaButton disabled={!valid} onPress={handleFinaliza}>
-                  <AddButtonText>Adicionar</AddButtonText>
-                </FinalizaButton>
-              </Buttons>
-            </ModalContent>
-          </ModalContainer>
-        </Modal>
-      )}
+        <NumberInput
+          onChange={setQuantidade}
+          value={quantidade}
+          unsigned
+          onlyIntegers
+        />
+      </Modal>
     </Container>
   );
 };

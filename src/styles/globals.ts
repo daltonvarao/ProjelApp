@@ -24,6 +24,6 @@ export const Input = styled.TextInput`
 export const Label = styled.Text`
   font-size: 16px;
   color: ${colors.primary};
-  margin: 12px 0;
+  margin: 8px 0;
   font-family: 'Poppins-Bold';
 `;

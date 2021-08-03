@@ -17,13 +17,14 @@ export const Input = styled.TextInput`
   flex: 1;
   font-size: 16px;
   font-family: 'Poppins-Regular';
-  color: #676767;
+  color: #333;
 `;
 
 export const ListContainer = styled.ScrollView<{
   listLength?: number;
 }>`
-  background: #fff;
+  background: #f5f5f8;
+
   border-radius: 5px;
   margin-bottom: 10px;
   max-height: ${props => (props.listLength ? 50 * props.listLength : 150)}px;

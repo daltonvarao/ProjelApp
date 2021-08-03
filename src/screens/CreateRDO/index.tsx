@@ -15,14 +15,7 @@ import EquipamentoRDO from '../../components/EquipamentoRdo';
 import AtividadeRDO from '../../components/AtividadeRdo';
 import Select from '../../components/Select';
 
-import {
-  ButtonText,
-  Container,
-  DeleteButton,
-  FinalizaButton,
-  FooterButtons,
-  Title,
-} from './styles';
+import {Container, FooterButtons, Title} from './styles';
 import {Input, Label} from '../../styles/globals';
 
 import {initialState, reducer} from './reducer';
@@ -35,6 +28,7 @@ import {IEquipamentoRdo} from '../../db/models/EquipamentoRdoSchema';
 import {IEquipamento} from '../../db/models/EquipamentoSchema';
 import {IEstrutura} from '../../db/models/EstruturaSchema';
 import Loader from '../../components/Loader';
+import Button from '../../components/Button';
 
 interface RouteParams {
   rdoId: number;
@@ -395,12 +389,14 @@ const CreateRDO: React.FC = () => {
         />
 
         <FooterButtons>
-          <DeleteButton onPress={confirmDeletion}>
-            <ButtonText>Deletar Rdo</ButtonText>
-          </DeleteButton>
-          <FinalizaButton onPress={confirmSubmit}>
-            <ButtonText>Concluir Rdo</ButtonText>
-          </FinalizaButton>
+          <Button title="Deletar RDO" onPress={confirmDeletion} type="error" />
+
+          <Button
+            title="Concluir RDO"
+            onPress={confirmSubmit}
+            type="success"
+            removeMargin
+          />
         </FooterButtons>
       </ScrollView>
     </Container>

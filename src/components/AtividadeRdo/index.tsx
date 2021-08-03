@@ -3,15 +3,6 @@ import Feather from 'react-native-vector-icons/Feather';
 
 import {
   Container,
-  Title,
-  Modal,
-  AddButton,
-  AddButtonText,
-  ModalContainer,
-  ModalContent,
-  CancelButton,
-  Buttons,
-  FinalizaButton,
   ListItems,
   ListItem,
   ItemText,
@@ -20,7 +11,6 @@ import {
   CardBody,
   Row,
   InputGroup,
-  ModalView,
 } from './styles';
 
 import * as db from '../../db';
@@ -34,6 +24,8 @@ import {IAtividadeRdo} from '../../db/models/AtividadeRdoSchema';
 import parseTime from '../../utils/parseTime';
 import NumberInput from '../NumberInput';
 import {IFuro} from '../../db/models/FuroSchema';
+import Modal from '../Modal';
+import Button from '../Button';
 
 interface AtividadeRdoProps {
   onSelect: (selectedAtividade: IAtividadeRdo) => void;
@@ -83,10 +75,6 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
     resetData();
 
     setShow(true);
-  }
-
-  function handleHideModal() {
-    setShow(false);
   }
 
   useEffect(() => {
@@ -181,134 +169,122 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
           );
         })}
       </ListItems>
-      <AddButton onPress={handleShowModal}>
-        <AddButtonText>Adicionar nova atividade</AddButtonText>
-      </AddButton>
 
-      {show && (
-        <Modal transparent>
-          <ModalContainer>
-            <ModalView>
-              <ModalContent>
-                <Title>Adicionar Atividade</Title>
+      <Button
+        title="Adicionar nova atividade"
+        onPress={handleShowModal}
+        removeMargin
+      />
 
-                <Label>Atividade</Label>
-                <Select
-                  data={atividades}
-                  labelKey="descricao"
-                  valueKey="id"
-                  listLength={3}
-                  placeholder="Selecione uma atividade"
-                  selectedValue={atividadeId}
-                  onSelect={(selected: IAtividade) => {
-                    setAtividadeId(selected.id);
-                    setAtividade(selected);
-                    setDescricao(selected.descricao);
-                  }}
-                />
+      <Modal
+        title="Adicionar atividade"
+        visible={show}
+        onClose={() => setShow(false)}
+        disableConfirmButton={!valid}
+        onConfirm={handleFinaliza}>
+        <Label>Atividade</Label>
+        <Select
+          data={atividades}
+          labelKey="descricao"
+          valueKey="id"
+          listLength={3}
+          placeholder="Selecione uma atividade"
+          selectedValue={atividadeId}
+          onSelect={(selected: IAtividade) => {
+            setAtividadeId(selected.id);
+            setAtividade(selected);
+            setDescricao(selected.descricao);
+          }}
+        />
 
-                {atividade?.tipo === 'produtiva' && (
-                  <React.Fragment>
-                    <Label>Furo</Label>
-                    <Select
-                      data={furos}
-                      labelKey="nome"
-                      valueKey="nome"
-                      listLength={3}
-                      placeholder="Selecione um furo"
-                      selectedValue={furoNome}
-                      onSelect={({nome}: IFuro) => {
-                        setFuroNome(nome);
-                      }}
-                      onBlur={setFuroNome}
-                    />
-                  </React.Fragment>
-                )}
+        {atividade?.tipo === 'produtiva' && (
+          <React.Fragment>
+            <Label>Furo</Label>
+            <Select
+              data={furos}
+              labelKey="nome"
+              valueKey="nome"
+              listLength={3}
+              placeholder="Selecione um furo"
+              selectedValue={furoNome}
+              onSelect={({nome}: IFuro) => {
+                setFuroNome(nome);
+              }}
+              onBlur={setFuroNome}
+            />
+          </React.Fragment>
+        )}
 
-                {atividade?.tipo === 'produtiva' ? (
-                  atividade.unidadeMedida === 'unidades' ? (
-                    <React.Fragment>
-                      <Label>Quantidade (un)</Label>
-                      <NumberInput
-                        onChange={newValue => {
-                          setQuantidade(String(newValue));
-                        }}
-                        value={quantidade}
-                        onlyIntegers
-                        unsigned
-                      />
-                    </React.Fragment>
-                  ) : (
-                    <React.Fragment>
-                      <Row>
-                        <InputGroup>
-                          <Label>Q. Inicial</Label>
-                          <Input
-                            placeholder="Quantidade"
-                            onChangeText={setQuantidadeInicial}
-                            value={quantidadeInicial}
-                            keyboardType="decimal-pad"
-                          />
-                        </InputGroup>
-                        <InputGroup style={{marginLeft: 8}}>
-                          <Label>Q. Final</Label>
-                          <Input
-                            placeholder="Quantidade"
-                            onChangeText={setQuantidadeFinal}
-                            value={quantidadeFinal}
-                            keyboardType="decimal-pad"
-                          />
-                        </InputGroup>
-                        <InputGroup style={{marginLeft: 8}}>
-                          <Label>Q. Total</Label>
-                          <Input
-                            placeholder="Quantidade"
-                            onChangeText={setQuantidadeFinal}
-                            value={quantidade}
-                            editable={false}
-                            keyboardType="decimal-pad"
-                          />
-                        </InputGroup>
-                      </Row>
-                    </React.Fragment>
-                  )
-                ) : null}
+        {atividade?.tipo === 'produtiva' ? (
+          atividade.unidadeMedida === 'unidades' ? (
+            <React.Fragment>
+              <Label>Quantidade (un)</Label>
+              <NumberInput
+                onChange={newValue => {
+                  setQuantidade(String(newValue));
+                }}
+                value={quantidade}
+                onlyIntegers
+                unsigned
+              />
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <Row>
+                <InputGroup>
+                  <Label>Q. Inicial</Label>
+                  <Input
+                    placeholder="Quantidade"
+                    onChangeText={setQuantidadeInicial}
+                    value={quantidadeInicial}
+                    keyboardType="decimal-pad"
+                  />
+                </InputGroup>
+                <InputGroup style={{marginLeft: 8}}>
+                  <Label>Q. Final</Label>
+                  <Input
+                    placeholder="Quantidade"
+                    onChangeText={setQuantidadeFinal}
+                    value={quantidadeFinal}
+                    keyboardType="decimal-pad"
+                  />
+                </InputGroup>
+                <InputGroup style={{marginLeft: 8}}>
+                  <Label>Q. Total</Label>
+                  <Input
+                    placeholder="Quantidade"
+                    onChangeText={setQuantidadeFinal}
+                    value={quantidade}
+                    editable={false}
+                    keyboardType="decimal-pad"
+                  />
+                </InputGroup>
+              </Row>
+            </React.Fragment>
+          )
+        ) : null}
 
-                <Row>
-                  <InputGroup>
-                    <Label>Horário inicial</Label>
-                    <ClockPicker
-                      value={horaInicio}
-                      onChange={date => {
-                        setHoraInicio(date);
-                      }}
-                    />
-                  </InputGroup>
-                  <InputGroup style={{marginLeft: 8}}>
-                    <Label>Horário final</Label>
-                    <ClockPicker
-                      value={horaFim}
-                      onChange={date => {
-                        setHoraFim(date);
-                      }}
-                    />
-                  </InputGroup>
-                </Row>
-
-                <Buttons>
-                  <CancelButton onPress={handleHideModal}>
-                    <AddButtonText>Cancelar</AddButtonText>
-                  </CancelButton>
-
-                  <FinalizaButton disabled={!valid} onPress={handleFinaliza}>
-                    <AddButtonText>Adicionar</AddButtonText>
-                  </FinalizaButton>
-                </Buttons>
-              </ModalContent>
-            </ModalView>
-          </ModalContainer>
-        </Modal>
-      )}
+        <Row>
+          <InputGroup>
+            <Label>Horário inicial</Label>
+            <ClockPicker
+              value={horaInicio}
+              onChange={date => {
+                setHoraInicio(date);
+              }}
+            />
+          </InputGroup>
+          <InputGroup style={{marginLeft: 8}}>
+            <Label>Horário final</Label>
+            <ClockPicker
+              value={horaFim}
+              onChange={date => {
+                setHoraFim(date);
+              }}
+            />
+          </InputGroup>
+        </Row>
+      </Modal>
     </Container>
   );
 };

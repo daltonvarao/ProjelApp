@@ -19,6 +19,7 @@ import Login from './screens/Login';
 import Home from './screens/Home';
 import CreateRDO from './screens/CreateRDO';
 import Settings from './screens/Settings';
+// import Notifications from './screens/Notifications';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -85,12 +86,15 @@ function TabRoutes() {
             case 'Settings':
               iconName = 'settings';
               break;
+            default:
+              iconName = 'bell';
           }
 
           return <Feather name={iconName} size={size} color={color} />;
         },
       })}>
       <Tab.Screen name="Home" component={Home} />
+      {/* <Tab.Screen name="Notifications" component={Notifications} /> */}
       <Tab.Screen name="Settings" component={Settings} />
     </Tab.Navigator>
   );
