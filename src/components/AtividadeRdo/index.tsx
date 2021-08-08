@@ -258,14 +258,18 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
   return (
     <Container>
       <ListItems>
-        {value.map((item, index) => (
-          <RenderListItem
-            key={index.toString()}
-            index={index}
-            item={item}
-            onRemove={onRemove}
-          />
-        ))}
+        {value
+          .sort((a, b) => {
+            return a.horaInicio > b.horaInicio ? 1 : -1;
+          })
+          .map((item, index) => (
+            <RenderListItem
+              key={index.toString()}
+              index={index}
+              item={item}
+              onRemove={onRemove}
+            />
+          ))}
       </ListItems>
 
       <Button
