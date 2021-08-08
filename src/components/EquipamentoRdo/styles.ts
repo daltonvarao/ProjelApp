@@ -1,3 +1,4 @@
+import {Animated} from 'react-native';
 import styled from 'styled-components/native';
 import colors from '../../styles/colors';
 
@@ -9,25 +10,21 @@ export const ListItems = styled.View`
   margin-bottom: 12px;
 `;
 
-export const ListItem = styled.View`
-  padding: 12px 10px;
+export const ListItem = styled(Animated.View)`
+  padding: 16px;
   background: #fff;
   border-radius: 5px;
   margin-bottom: 8px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
 `;
 
-export const RemoveItem = styled.TouchableOpacity.attrs(() => ({
-  activeOpacity: 0.7,
-}))`
-  background: #f0f0fd;
-  width: 26px;
-  height: 26px;
+export const RemoveItem = styled.View`
+  background: ${colors.error};
+  width: 100%;
   justify-content: center;
-  align-items: center;
-  border-radius: 13px;
+  align-items: flex-end;
+  border-radius: 5px;
+  margin-bottom: 8px;
+  padding-right: 32px;
 `;
 
 export const ItemText = styled.Text`

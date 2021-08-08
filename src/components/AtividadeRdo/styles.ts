@@ -20,22 +20,17 @@ export const ListItem = styled(Animated.View)`
   align-items: center;
 `;
 
-export const RemoveItem = styled.TouchableOpacity.attrs(() => ({
-  activeOpacity: 0.7,
-}))`
+export const RemoveItem = styled.View`
   background: ${colors.error};
   width: 100%;
   justify-content: center;
   align-items: flex-end;
   border-radius: 5px;
   margin-bottom: 8px;
-`;
-
-export const RemoveItemRight = styled(RemoveItem)`
   padding-right: 32px;
 `;
 
-export const CardBody = styled.TouchableOpacity`
+export const CardBody = styled.View`
   width: 100%;
 `;
 

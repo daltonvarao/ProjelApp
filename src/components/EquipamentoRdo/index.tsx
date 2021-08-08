@@ -1,4 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, createRef} from 'react';
+import {Animated, Vibration, ToastAndroid} from 'react-native';
+import {Swipeable} from 'react-native-gesture-handler';
 import Feather from 'react-native-vector-icons/Feather';
 
 import {Container, ListItems, ListItem, ItemText, RemoveItem} from './styles';
@@ -13,6 +15,71 @@ import {IEquipamentoRdo} from '../../db/models/EquipamentoRdoSchema';
 import {IEquipamento} from '../../db/models/EquipamentoSchema';
 import NumberInput from '../NumberInput';
 import Button from '../Button';
+
+const RenderListItem: React.FC<{
+  item: IEquipamento;
+  onRemove: (removedItem: IEquipamento) => void;
+}> = ({item, onRemove}) => {
+  const [elevation] = useState(new Animated.Value(0));
+  const ref = createRef<Swipeable>();
+  const [alertShown, setAlertShown] = useState(false);
+
+  function increaseElevation() {
+    Animated.timing(elevation, {
+      toValue: 1,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  function decreaseElevation() {
+    Animated.timing(elevation, {
+      toValue: 0,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  return (
+    <Swipeable
+      onBegan={() => {
+        if (!alertShown) {
+          ToastAndroid.show(
+            'Arraste para a esquerda para deletar',
+            ToastAndroid.SHORT,
+          );
+          setAlertShown(true);
+        }
+      }}
+      ref={ref}
+      onSwipeableRightOpen={() => {
+        if (ref.current) {
+          ref.current.close();
+        }
+        onRemove(item);
+      }}
+      onSwipeableRightWillOpen={() => {
+        Vibration.vibrate(100);
+      }}
+      onActivated={increaseElevation}
+      onCancelled={decreaseElevation}
+      onSwipeableWillClose={decreaseElevation}
+      renderRightActions={() => {
+        return (
+          <RemoveItem>
+            <Feather name="trash" size={26} color="#fff" />
+          </RemoveItem>
+        );
+      }}>
+      <ListItem style={{elevation}}>
+        <ItemText>
+          {item.tag_description}
+          {item.descricao.length > 20 && '...'}
+        </ItemText>
+      </ListItem>
+    </Swipeable>
+  );
+};
 
 interface EquipamentoRdoProps {
   onSelect: (selectedEquipamento: IEquipamentoRdo) => void;
@@ -93,15 +160,11 @@ const EquipamentoRDO: React.FC<EquipamentoRdoProps> = ({
       <ListItems>
         {previewData.map((item, index) => {
           return (
-            <ListItem key={index.toString()}>
-              <ItemText>
-                {item.tag_description}
-                {item.descricao.length > 20 && '...'}
-              </ItemText>
-              <RemoveItem onPress={() => onRemove(item)}>
-                <Feather name="x" color="#aaa" size={20} />
-              </RemoveItem>
-            </ListItem>
+            <RenderListItem
+              item={item}
+              onRemove={onRemove}
+              key={index.toString()}
+            />
           );
         })}
       </ListItems>
@@ -123,7 +186,7 @@ const EquipamentoRDO: React.FC<EquipamentoRdoProps> = ({
           data={equipamentos}
           labelKey="tag_description"
           valueKey="id"
-          listLength={2}
+          listLength={3}
           placeholder="Procure algum equipamento"
           selectedValue={equipamentoId}
           onSelect={selectedEq => {

@@ -11,7 +11,6 @@ import {
   CardBody,
   Row,
   InputGroup,
-  RemoveItemRight,
   CardHeader,
   TitleText,
   Table,
@@ -20,6 +19,7 @@ import {
   TableData,
   ItemTextObs,
   CardContent,
+  RemoveItem,
 } from './styles';
 
 import * as db from '../../db';
@@ -50,6 +50,7 @@ const RenderListItem: React.FC<{
 }> = ({index, item, onRemove}) => {
   const [elevation] = useState(new Animated.Value(0));
   const ref = createRef<Swipeable>();
+  const [alertShown, setAlertShown] = useState(false);
 
   function increaseElevation() {
     Animated.timing(elevation, {
@@ -74,6 +75,15 @@ const RenderListItem: React.FC<{
   return (
     <Swipeable
       ref={ref}
+      onBegan={() => {
+        if (!alertShown) {
+          ToastAndroid.show(
+            'Arraste para a esquerda para deletar',
+            ToastAndroid.SHORT,
+          );
+          setAlertShown(true);
+        }
+      }}
       onSwipeableRightOpen={() => {
         if (ref.current) {
           ref.current.close();
@@ -88,19 +98,13 @@ const RenderListItem: React.FC<{
       onSwipeableWillClose={decreaseElevation}
       renderRightActions={() => {
         return (
-          <RemoveItemRight>
+          <RemoveItem>
             <Feather name="trash" size={26} color="#fff" />
-          </RemoveItemRight>
+          </RemoveItem>
         );
       }}>
       <ListItem style={{elevation}}>
-        <CardBody
-          onPress={() => {
-            ToastAndroid.show(
-              'Arraste para a esquerda para deletar',
-              ToastAndroid.SHORT,
-            );
-          }}>
+        <CardBody>
           <CardHeader>
             <ItemText>
               {parseTime(item.horaInicio, false)
