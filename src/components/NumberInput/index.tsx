@@ -12,6 +12,7 @@ interface NumberInputProps {
   step?: number;
   onlyIntegers?: boolean;
   unsigned?: boolean;
+  nonNull?: boolean;
 }
 
 const NumberInput: React.FC<NumberInputProps> = ({
@@ -20,6 +21,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
   step = 1,
   onlyIntegers = false,
   unsigned = false,
+  nonNull,
 }) => {
   function increment() {
     let result = Number(value) + step;
@@ -30,6 +32,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
   function decrement() {
     let result = Number(value) - step;
     if (unsigned && result < 0) return;
+    if (nonNull && result < 1) return;
 
     onChange(String(result));
   }
@@ -55,6 +58,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
         onChangeText={handleChange}
         value={String(value)}
         keyboardType="numeric"
+        textAlign="center"
       />
       <TouchableOpacity onPress={increment} style={styles.buttonRight}>
         <Feather name="plus" size={22} color={colors.primary} />

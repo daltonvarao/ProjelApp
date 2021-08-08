@@ -1,13 +1,15 @@
 import axios from 'axios';
 import * as auth from './auth';
 
-const development = process.env.NODE_ENV === 'development';
+const env = __DEV__ ? 'development' : 'production';
 
-const devBaseURL = 'http://192.168.0.106:3333/api';
-const prodBaseURL = 'http://daltonfelipe.site/api';
+const baseURL = {
+  development: 'http://192.168.1.6:3333/api',
+  production: 'http://daltonfelipe.site/api',
+};
 
 const api = axios.create({
-  baseURL: development ? devBaseURL : prodBaseURL,
+  baseURL: baseURL[env],
 });
 
 api.interceptors.request.use(async function (request) {

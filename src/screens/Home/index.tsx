@@ -1,11 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {
-  FlatList,
-  ListRenderItem,
-  View,
-  RefreshControl,
-  Alert,
-} from 'react-native';
+import {FlatList, ListRenderItem, RefreshControl, Alert} from 'react-native';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import NetInfo from '@react-native-community/netinfo';
 
@@ -24,6 +18,10 @@ import {
   ActionButton,
   ActionButtonText,
   EmptyMessage,
+  RDOHeader,
+  RDOInfo,
+  RDOActions,
+  RDOHeaderInfo,
 } from './styles';
 
 import {HeaderText} from '../../styles/globals';
@@ -174,33 +172,24 @@ export default function Home() {
   const renderItem: ListRenderItem<IRdo> = ({item, index}) => {
     return (
       <RDOContainer>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <View style={{flexDirection: 'row'}}>
+        <RDOHeader>
+          <RDOHeaderInfo>
             <RDOIcon>
               <RDOIconImg source={hammerScrewdriverImg} />
             </RDOIcon>
 
-            <View
-              style={{
-                justifyContent: 'space-between',
-              }}>
-              <RDONome>{item.nome || `Sem titulo ${index + 1}`}</RDONome>
+            <RDOInfo>
+              <RDONome numberOfLines={1}>
+                {item.nome || `Sem titulo ${index + 1}`}
+              </RDONome>
               <RDOStatus>{item.status}</RDOStatus>
-            </View>
-          </View>
+            </RDOInfo>
+          </RDOHeaderInfo>
 
           <RDODate>{parseDate(item.data)}</RDODate>
-        </View>
+        </RDOHeader>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 22,
-          }}>
+        <RDOActions>
           <ActionButton
             onPress={() => validateAndSumbitRdo(item.rdoId)}
             backgroundColor={colors.success}>
@@ -211,7 +200,7 @@ export default function Home() {
             backgroundColor={colors.primary}>
             <ActionButtonText>Abrir</ActionButtonText>
           </ActionButton>
-        </View>
+        </RDOActions>
       </RDOContainer>
     );
   };

@@ -27,6 +27,7 @@ export function reducer(state: State, action: Action): State {
       if (action.field) {
         return {...state, [action.field]: action.value};
       }
+      return state;
     case 'CHANGE_ALL':
       return {...state, ...action.value};
 
@@ -35,5 +36,8 @@ export function reducer(state: State, action: Action): State {
         ...state,
         concluido: true,
       };
+
+    default:
+      return state;
   }
 }

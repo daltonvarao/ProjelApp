@@ -7,16 +7,15 @@ export const NameContainer = styled.View`
   background: ${colors.primary};
   display: flex;
   align-items: center;
-  padding: 42px 0;
-  height: 320px;
+  padding: 32px 0;
+  height: 300px;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
 `;
 
 export const NameAbbrCircle = styled.Text`
-  width: 132px;
-  height: 132px;
-  display: flex;
+  width: 120px;
+  height: 120px;
   background: #fff;
   text-align: center;
   text-align-vertical: center;
@@ -29,7 +28,7 @@ export const NameAbbrCircle = styled.Text`
 
 export const NameText = styled.Text`
   color: #fff;
-  font-size: 32px;
+  font-size: 28px;
   font-family: 'Poppins-SemiBold';
 `;
 

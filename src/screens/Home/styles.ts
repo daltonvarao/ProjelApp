@@ -39,6 +39,25 @@ export const RDOContainer = styled.View`
   margin-bottom: 12px;
 `;
 
+export const RDOHeader = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const RDOHeaderInfo = styled.View`
+  flex-direction: row;
+  width: 60%;
+`;
+
+export const RDOInfo = styled.View`
+  justify-content: space-between;
+`;
+
+export const RDOActions = styled.View`
+  flex-direction: row;
+  margin-top: 22px;
+`;
+
 export const RDOIcon = styled.View`
   background-color: ${colors.primary};
   width: 44px;
@@ -65,6 +84,7 @@ export const RDOStatus = styled.Text`
 
 export const RDODate = styled.Text`
   font-size: 12px;
+  width: auto;
   color: ${colors.dark};
 `;
 

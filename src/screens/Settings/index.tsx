@@ -31,7 +31,7 @@ import * as auth from '../../services/auth';
 import * as db from '../../db';
 import * as sync from '../../services/sync';
 
-export default function Notifications() {
+export default function Settings() {
   const navigation = useNavigation();
 
   const spin = new Animated.Value(0);
@@ -114,9 +114,15 @@ export default function Notifications() {
 
           if (outdated) {
             await syncWithApi();
+            ToastAndroid.show('Dados sincronizados', ToastAndroid.SHORT);
           } else {
+            ToastAndroid.show('Dados sincronizados', ToastAndroid.SHORT);
           }
         } catch (error) {
+          ToastAndroid.show(
+            'Erro ao sincronizados dados, tente novamente',
+            ToastAndroid.SHORT,
+          );
           console.log(error);
         }
       }

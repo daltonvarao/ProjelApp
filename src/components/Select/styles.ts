@@ -17,13 +17,15 @@ export const Input = styled.TextInput`
   flex: 1;
   font-size: 16px;
   font-family: 'Poppins-Regular';
-  color: #676767;
+  color: #333;
 `;
 
 export const ListContainer = styled.ScrollView<{
   listLength?: number;
+  background: string;
 }>`
-  background: #fff;
+  background: ${props => props.background};
+
   border-radius: 5px;
   margin-bottom: 10px;
   max-height: ${props => (props.listLength ? 50 * props.listLength : 150)}px;
@@ -58,3 +60,5 @@ export const SelectedItem = styled.TouchableOpacity`
 export const SelectedItemText = styled.Text`
   font-size: 14px;
 `;
+
+export const SelectActionButton = styled.TouchableOpacity``;

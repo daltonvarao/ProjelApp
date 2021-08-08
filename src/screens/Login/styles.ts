@@ -48,7 +48,7 @@ export const InvalidInput = styled.Text`
 `;
 
 export const Button = styled.TouchableOpacity`
-  padding: 16px;
+  padding: 12px;
   background: ${colors.primary};
   opacity: ${props => (props.disabled ? 0.7 : 1)};
   width: 100%;
@@ -60,6 +60,6 @@ export const TextButton = styled.Text`
   color: #fff;
   font-family: 'Poppins-SemiBold';
 
-  font-size: 22px;
+  font-size: 20px;
   text-align: center;
 `;

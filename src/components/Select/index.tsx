@@ -9,6 +9,7 @@ import {
   ListItem,
   ListItemLabel,
   Input,
+  SelectActionButton,
 } from './styles';
 
 interface SelectProps {
@@ -20,6 +21,7 @@ interface SelectProps {
   placeholder?: string;
   listLength?: number;
   onBlur?: (text: string) => void;
+  listBgColor?: string;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -30,6 +32,7 @@ const Select: React.FC<SelectProps> = ({
   selectedValue,
   placeholder,
   listLength,
+  listBgColor = '#fff',
   onBlur,
 }) => {
   const [search, setSearch] = useState('');
@@ -70,35 +73,41 @@ const Select: React.FC<SelectProps> = ({
         />
 
         {search ? (
-          <Feather
+          <SelectActionButton
+            hitSlop={{
+              bottom: 25,
+              top: 25,
+              left: 25,
+              right: 25,
+            }}
             onPress={() => {
               onSelect('');
               setSearch('');
-            }}
-            name="x"
-            size={20}
-          />
+            }}>
+            <Feather name="x" size={20} />
+          </SelectActionButton>
         ) : showList ? (
-          <Feather
+          <SelectActionButton
             onPress={() => {
               setShowList(false);
-            }}
-            name="chevron-up"
-            size={22}
-          />
+            }}>
+            <Feather name="chevron-up" size={22} />
+          </SelectActionButton>
         ) : (
-          <Feather
+          <SelectActionButton
             onPress={() => {
               setShowList(true);
-            }}
-            name="chevron-down"
-            size={22}
-          />
+            }}>
+            <Feather name="chevron-down" size={22} />
+          </SelectActionButton>
         )}
       </InputContainer>
 
       {selectableData.length > 0 && showList && (
-        <ListContainer listLength={listLength} nestedScrollEnabled>
+        <ListContainer
+          background={listBgColor}
+          listLength={listLength}
+          nestedScrollEnabled>
           {selectableData.map((item, index) => (
             <ListItem
               key={index.toString()}
