@@ -11,6 +11,7 @@ export const initialState: State = {
   rdoId: Date.now(),
   concluido: false,
   users: [],
+  turno: '1T',
   equipamentos: [],
   atividades: [],
 };

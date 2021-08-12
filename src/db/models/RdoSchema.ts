@@ -14,6 +14,7 @@ export interface IRdo {
   estruturaId?: number;
   rdoId: number;
   concluido: boolean;
+  turno: '1T' | '2T';
   users: IRdoUser[];
   equipamentos: IEquipamentoRdo[];
   atividades: IAtividadeRdo[];
@@ -30,6 +31,7 @@ const RdoSchema: Realm.ObjectSchema = {
     rdoId: 'int',
     equipamentoId: 'int?',
     estruturaId: 'int?',
+    turno: 'string',
     users: 'RdoUser[]',
     equipamentos: 'EquipamentoRdo[]',
     atividades: 'AtividadeRdo[]',

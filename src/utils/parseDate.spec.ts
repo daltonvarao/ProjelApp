@@ -8,4 +8,12 @@ describe('Parse date util', () => {
 
     expect(parsedDate).toEqual('16/02/1998');
   });
+
+  it('should date in Date format returns formatted string with custom separator', () => {
+    const date = new Date('02-16-1998');
+
+    const parsedDate = parseDate(date, '.');
+
+    expect(parsedDate).toEqual('16.02.1998');
+  });
 });
