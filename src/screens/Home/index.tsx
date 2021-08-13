@@ -60,6 +60,7 @@ export default function Home() {
       rdoId: Date.now(),
       concluido: false,
       users: [],
+      turno: '1T',
       equipamentos: [],
       atividades: [],
     };

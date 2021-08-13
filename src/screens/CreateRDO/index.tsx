@@ -29,6 +29,7 @@ import {IEquipamento} from '../../db/models/EquipamentoSchema';
 import {IEstrutura} from '../../db/models/EstruturaSchema';
 import Loader from '../../components/Loader';
 import Button from '../../components/Button';
+import parseDate from '../../utils/parseDate';
 
 interface RouteParams {
   rdoId: number;
@@ -39,6 +40,7 @@ const CreateRDO: React.FC = () => {
   const params = route.params as RouteParams;
   const navigation = useNavigation();
   const condicoesTempo = ['bom', 'chuvoso'];
+  const turnos = ['1T', '2T'];
   const statusAtividade = ['andamento', 'finalizado'];
   const [users, setUsers] = useState<IUser[]>();
   const [equipamentos, setEquipamentos] = useState<IEquipamento[]>();
@@ -183,6 +185,7 @@ const CreateRDO: React.FC = () => {
           rdo.concluido = state.concluido;
           rdo.equipamentoId = state.equipamentoId;
           rdo.estruturaId = state.estruturaId;
+          rdo.turno = state.turno;
         });
       }
     }
@@ -200,6 +203,33 @@ const CreateRDO: React.FC = () => {
     }, [params]),
   );
 
+  useEffect(() => {
+    const estrutura = estruturas?.find(item => item.id === state.estruturaId);
+    const equipamento = equipamentos?.find(
+      item => item.id === state.equipamentoId,
+    );
+    const data = parseDate(state.data, '.');
+
+    let nome = data.concat(' - ').concat(state.turno);
+
+    if (equipamento?.tag) {
+      nome = nome.concat(' - ').concat(equipamento.tag);
+    }
+
+    if (estrutura?.nome) {
+      nome = nome.concat(' - ').concat(estrutura.nome);
+    }
+
+    dispatch({type: 'CHANGE_STATE', field: 'nome', value: nome});
+  }, [
+    state.turno,
+    state.estruturaId,
+    state.equipamentoId,
+    state.data,
+    estruturas,
+    equipamentos,
+  ]);
+
   if (loading) {
     return <Loader />;
   }
@@ -216,6 +246,20 @@ const CreateRDO: React.FC = () => {
           onChangeText={(text: string) =>
             dispatch({field: 'nome', type: 'CHANGE_STATE', value: text})
           }
+          editable={false}
+        />
+
+        <Title>Turno</Title>
+        <Picker
+          onValueChange={value =>
+            dispatch({
+              field: 'turno',
+              type: 'CHANGE_STATE',
+              value: value.toString(),
+            })
+          }
+          data={turnos}
+          selectedValue={state.turno}
         />
 
         <Label>Equipamento principal</Label>
