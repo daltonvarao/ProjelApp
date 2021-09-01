@@ -174,6 +174,7 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
   const [quantidade, setQuantidade] = useState('0');
   const [quantidadeInicial, setQuantidadeInicial] = useState('0');
   const [quantidadeFinal, setQuantidadeFinal] = useState('0');
+  const [furoId, setFuroId] = useState<number>();
   const [furoNome, setFuroNome] = useState<string>();
 
   function resetData() {
@@ -187,6 +188,8 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
     setQuantidadeFinal('0');
     setQuantidadeInicial('0');
     setObservacao('');
+    setFuroId(undefined);
+    setFuroNome('');
   }
 
   function handleShowModal() {
@@ -195,6 +198,7 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
     setShow(true);
   }
 
+  // furos duplicando na criacao de atividades rdo
   useEffect(() => {
     async function loadCollections() {
       const realm = await db.connect();
@@ -202,6 +206,7 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
       const atividadesData = realm
         .objects<IAtividade>('Atividade')
         .sorted('descricao');
+
       let furosData = realm.objects<IFuro>('Furo').sorted('nome');
 
       if (estruturaId) {
@@ -249,8 +254,9 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
         quantidade: Number(quantidade),
         quantidadeFinal: Number(quantidadeFinal),
         quantidadeInicial: Number(quantidadeInicial),
-        furoNome,
+        furoId,
         observacao,
+        furoNome,
       });
     }
   }
@@ -321,14 +327,14 @@ const AtividadeRDO: React.FC<AtividadeRdoProps> = ({
             <Select
               data={furos}
               labelKey="nome"
-              valueKey="nome"
+              valueKey="id"
               listLength={3}
               placeholder="Selecione um furo"
-              selectedValue={furoNome}
-              onSelect={({nome}: IFuro) => {
-                setFuroNome(nome);
+              selectedValue={furoId}
+              onSelect={(selected: IFuro) => {
+                setFuroId(selected.id);
+                setFuroNome(selected.nome);
               }}
-              onBlur={setFuroNome}
               listBgColor="#f5f5f8"
             />
           </React.Fragment>

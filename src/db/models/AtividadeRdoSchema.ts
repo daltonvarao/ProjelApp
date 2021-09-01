@@ -11,6 +11,7 @@ export interface IAtividadeRdo {
   tipo: 'parada' | 'improdutiva' | 'produtiva';
   quantidadeInicial: number;
   quantidadeFinal: number;
+  furoId?: number;
   furoNome?: string;
 }
 
@@ -18,6 +19,7 @@ const AtividadeRdoSchema: Realm.ObjectSchema = {
   name: 'AtividadeRdo',
   properties: {
     atividadeId: 'int',
+    furoId: 'int?',
     furoNome: 'string?',
     observacao: 'string?',
     horaFim: 'date',
