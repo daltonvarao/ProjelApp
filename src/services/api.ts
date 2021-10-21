@@ -5,7 +5,7 @@ const env = __DEV__ ? 'development' : 'production';
 
 const baseURL = {
   development: 'http://192.168.1.6:3333/api',
-  production: 'http://daltonfelipe.site/api',
+  production: 'http://104.131.102.145/api',
 };
 
 const api = axios.create({
