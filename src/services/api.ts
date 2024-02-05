@@ -4,7 +4,7 @@ import * as auth from './auth';
 const env = __DEV__ ? 'development' : 'production';
 
 const baseURL = {
-  development: 'https://919a-143-208-220-222.ngrok-free.app/api',
+  development: 'https://3dcb-143-208-221-39.ngrok-free.app/api',
   production: 'http://104.131.102.145/api',
 };
 

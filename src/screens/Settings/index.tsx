@@ -4,6 +4,8 @@ import {CommonActions, useNavigation} from '@react-navigation/native';
 import {RectButton} from 'react-native-gesture-handler';
 import Feather from 'react-native-vector-icons/Feather';
 import NetInfo from '@react-native-community/netinfo';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 import {
   Container,
@@ -36,7 +38,7 @@ export default function Settings() {
 
   const spin = new Animated.Value(0);
   const [user, setUser] = useState<IUser>();
-  const [spinValue, setSpinValue] = useState<Animated.AnimatedInterpolation>();
+  const [spinValue, setSpinValue] = useState<Animated.AnimatedInterpolation<number>>();
 
   const resetNavigation = useCallback(
     (name: string) => {
@@ -128,7 +130,7 @@ export default function Settings() {
       }
     }
 
-    resetNavigation('Home');
+    resetNavigation('Main');
   }
 
   useEffect(() => {
@@ -151,7 +153,7 @@ export default function Settings() {
           throw 'User not found';
         }
 
-        setUser(storedUser?.toJSON());
+        setUser(storedUser?.toJSON() as unknown as IUser);
       } catch (error) {
         console.log(error);
       }
@@ -204,7 +206,8 @@ export default function Settings() {
                 },
               ],
             }}>
-            <Feather color={colors.success} name="refresh-cw" size={26} />
+            {/* <Feather color={colors.success} name="refresh-cw" size={26}/> */}
+            <Icon name="rocket" size={30} color="#900" />;
           </Animated.View>
         </RectButton>
 
@@ -213,6 +216,7 @@ export default function Settings() {
           style={[styles.button, styles.logoutButton]}>
           <LogoutTitle>Encerrar sessão</LogoutTitle>
           <Feather color="white" name="log-out" size={26} />
+          
         </RectButton>
       </InfoContainer>
     </Container>
