@@ -23,8 +23,6 @@ const TabRoutes = () => {
                     'Settings': 'settings'
                 }
 
-                console.log(`route.name: ${route.name}`)
-
                 return <Feather
                     name={routeIcon[route.name as keyof typeof routeIcon]}
                     size={size}
