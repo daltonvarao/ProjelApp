@@ -4,6 +4,8 @@ import {CommonActions, useNavigation} from '@react-navigation/native';
 import {RectButton} from 'react-native-gesture-handler';
 import Feather from 'react-native-vector-icons/Feather';
 import NetInfo from '@react-native-community/netinfo';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 import {
   Container,
@@ -30,13 +32,14 @@ import api from '../../services/api';
 import * as auth from '../../services/auth';
 import * as db from '../../db';
 import * as sync from '../../services/sync';
+import Button from '../../components/Button';
 
 export default function Settings() {
   const navigation = useNavigation();
 
   const spin = new Animated.Value(0);
   const [user, setUser] = useState<IUser>();
-  const [spinValue, setSpinValue] = useState<Animated.AnimatedInterpolation>();
+  const [spinValue, setSpinValue] = useState<Animated.AnimatedInterpolation<number>>();
 
   const resetNavigation = useCallback(
     (name: string) => {
@@ -128,7 +131,7 @@ export default function Settings() {
       }
     }
 
-    resetNavigation('Home');
+    resetNavigation('Main');
   }
 
   useEffect(() => {
@@ -151,7 +154,7 @@ export default function Settings() {
           throw 'User not found';
         }
 
-        setUser(storedUser?.toJSON());
+        setUser(storedUser?.toJSON() as unknown as IUser);
       } catch (error) {
         console.log(error);
       }
@@ -194,7 +197,7 @@ export default function Settings() {
 
         <Title>Opções</Title>
 
-        <RectButton onPress={syncOperations} style={[styles.button]}>
+        {/* <RectButton onPress={syncOperations} style={[styles.button]}>
           <SyncTitle>Sincronizar dados offline</SyncTitle>
           <Animated.View
             style={{
@@ -204,16 +207,25 @@ export default function Settings() {
                 },
               ],
             }}>
-            <Feather color={colors.success} name="refresh-cw" size={26} />
+            <Feather color={colors.success} name="refresh-cw" size={26}/>
+            
           </Animated.View>
-        </RectButton>
+        </RectButton> */}
 
-        <RectButton
+        <Button title="Sincronizar dados offline"
+          onPress={syncOperations}/>
+
+        {/* <RectButton
           onPress={confirmLogout}
           style={[styles.button, styles.logoutButton]}>
           <LogoutTitle>Encerrar sessão</LogoutTitle>
           <Feather color="white" name="log-out" size={26} />
-        </RectButton>
+          
+        </RectButton> */}
+
+        <Button title="Encerrar sessão"
+          onPress={confirmLogout}
+          style={styles.logoutButton}/>
       </InfoContainer>
     </Container>
   );

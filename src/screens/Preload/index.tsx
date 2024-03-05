@@ -40,7 +40,7 @@ const Preload: React.FC = () => {
 
       setMessage('Instalando atualizações.');
       await sync.syncWithApi(response.data);
-    } catch (error) {
+    } catch (error:any) {
       setMessage('Não foi possível conectar ao servidor!');
       console.log(error.toJSON());
     }
@@ -54,7 +54,7 @@ const Preload: React.FC = () => {
         setMessage('Enviando dados para o servidor.');
         await api.post('/rdos', {data: localRdos});
         await sync.removeLocalData();
-      } catch (error) {
+      } catch (error:any) {
         console.log(error.toJSON());
       }
     }
@@ -93,14 +93,14 @@ const Preload: React.FC = () => {
             } else {
               setMessage('Aplicação atualizada.');
             }
-          } catch (error) {
+          } catch (error:any) {
             setMessage('Não foi possível conectar ao servidor.');
             console.log(error.toJSON());
           }
         }
       }
 
-      resetNavigation('Home');
+      resetNavigation('Main');
     }
     syncOperations();
   }, [resetNavigation]);

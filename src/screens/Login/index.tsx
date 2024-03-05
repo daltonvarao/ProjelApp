@@ -40,6 +40,9 @@ export default function Login() {
 
   async function handleLoginButton() {
     try {
+
+      
+      
       const response = await api.post('/auth', {
         cpf: Masks.cpfUnmask(cpf),
         password,

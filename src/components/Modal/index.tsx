@@ -22,6 +22,7 @@ interface ModalProps {
   onConfirm?: () => void;
   disableConfirmButton?: boolean;
   closeOnConfirm?: boolean;
+  children:any
 }
 
 const ReactModal: React.FC<ModalProps> = ({

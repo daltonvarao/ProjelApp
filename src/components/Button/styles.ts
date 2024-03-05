@@ -10,6 +10,7 @@ export interface ButtonProps {
   type?: 'success' | 'primary' | 'error';
   disabled?: boolean;
   removeMargin?: boolean;
+  style?:any
 }
 
 export const ButtonContainer = styled.TouchableOpacity.attrs(() => ({

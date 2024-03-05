@@ -1,9 +1,11 @@
 import React, {useState, useCallback} from 'react';
 import {FlatList, ListRenderItem, RefreshControl, Alert} from 'react-native';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
-import NetInfo from '@react-native-community/netinfo';
+// import NetInfo from '@react-native-community/netinfo';
 
-import Feather from 'react-native-vector-icons/Feather';
+// import Feather from 'react-native-vector-icons/Feather';
+
+declare var NetInfo : any
 
 import {
   Container,
@@ -151,7 +153,7 @@ export default function Home() {
           realm.write(() => {
             realm.delete(rdo);
           });
-        } catch (error) {
+        } catch (error:any) {
           console.log(error.toJSON());
         }
       } else {
@@ -225,7 +227,7 @@ export default function Home() {
       />
 
       <FloatingButton onPress={handleNewRDO}>
-        <Feather name="plus" size={22} color="#ffffff" />
+        {/* <Feather name="plus" size={22} color="#ffffff" /> */}
         <FloatingTextButton>NOVO RDO</FloatingTextButton>
       </FloatingButton>
     </Container>
