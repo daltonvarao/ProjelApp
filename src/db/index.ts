@@ -32,5 +32,6 @@ const realmConfiguration: Realm.Configuration = {
 
 export async function connect() {
   const realm = await Realm.open(realmConfiguration);
+  //console.log(`Database path: ${realm.path}`);
   return realm;
 }

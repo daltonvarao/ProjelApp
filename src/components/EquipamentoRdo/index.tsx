@@ -115,16 +115,7 @@ const EquipamentoRDO: React.FC<EquipamentoRdoProps> = ({
 
     setEquipamentos(equipamentosData.toJSON());
 
-    setEquipamentos([
-      {
-        descricao: "foo",
-        id: 1,
-        sonda: true,
-        tag: "bar",
-        tag_description: "baz",
-
-      }
-    ])
+    
   }
 
   function handleShowModal() {

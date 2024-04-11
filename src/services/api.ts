@@ -3,7 +3,7 @@ import * as auth from './auth';
 import { ENVIRONMENT } from '../environment';
 
 const baseURL = {
-  "DEV": 'http://192.168.1.40:3333/api',
+  "DEV": 'https://6ea8-2804-2b04-21c-c000-95e2-2360-806f-d35.ngrok-free.app/api',
   "PROD": 'http://104.131.102.145/api',
   "TEST": "http://104.131.102.145:8080/api"
 };
